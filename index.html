@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <title>Supreme Simplified | Address Jig Tool</title>
+    <!-- Main CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet"/>
+    <!-- Page Specific CSS -->
+    <style type="text/css">
+        .loginInput { border:none; outline: none; width: 100%}
+        .formControl {padding: 6px 12px; }
+        .formGroup { width: 100%; border-bottom: 2px solid rgba(255, 0, 0, 0.24); position: relative; margin-bottom: 15px;}
+        .lineFocus { position: absolute; display: block; height: 100%; width: 100%; top: 0; left: 0; pointer-events: none;}
+        .lineFocus::before { content: ""; display: block; position: absolute; bottom: -2px; height: 2px; background: red;
+            left: 0; width: 0; -webkit-transition: all 0.4s; -o-transition: all 0.4s; -moz-transition: all 0.4s; transition: all 0.4s;}
+        .formControl:focus + .lineFocus::after { top: -22px; font-size: 18px;}
+        .formControl:focus + .lineFocus::before {width: 100%;}
+        .has-val.formControl + .lineFocus::after { top: -22px; font-size: 18px;}
+        .btn-danger { background-color: rgba(255, 0, 0, 0.70); border-color: red;}
+        .btn-danger:hover { background-color: rgba(255, 0, 0, 0.80); border-color: red;}
+    </style>
+    <!-- Script Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.7.3"></script>
+    <script src="/jig.js"></script>
+    <script>
+        $(function() {
+            $("#address-form").on("submit", function (e) {
+                e.preventDefault();
+                content = "";
+                addressJigs = $("#address-jigs");
+                addressJigs.html("");
+                jigAddress($("#address-input").val().split(",")[0]).forEach(address => {
+                    html = "<div class=\"col-md-4\"><div class=\"list-group list-group-horizontal\"><h3>" + address["address"] + "</h3>";
+                    address["others"].forEach(value => {
+                        html += "<p class=\"list-group-item\">" + value.replace("\n", "<br/>") + "</p>";
+                    });
+                    html += "</div></div>";
+                    addressJigs.append(html);
+                });
+            });
+            var placesAutocomplete = places({
+                container: document.querySelector('#address-input')
+            });
+        });
+    </script>
+</head>
+<body style="font-family: 'Quicksand', sans-serif;">
+<div class="container">
+    <div class="col-xs-12 col-xs-offset-0 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4" style="padding-top: 10%">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="text-center">
+                    <p>Branding/Logo/Text Goes here</p>
+                </div>
+                <h2 class="text-center">Address Jig Tool</h2>
+                <form method="post" id="address-form" class="validate-form">
+                    <div class="formGroup validate-input" data-validate="Valid address is required.">
+                        <input class="formControl loginInput" id="address-input" type="search" placeholder="What is the Address" name="address" required="required"/>
+                        <span class="lineFocus" data-placeholder="&#xf2c2;"></span>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-danger btn-block">Jig Me</button>
+                    </div>
+                </form>
+                <h3 class="text-center" style="padding-top: 15px;">Addresses</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="address-jigs" class="fluid-container">
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
