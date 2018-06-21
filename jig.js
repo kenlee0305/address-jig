@@ -44,25 +44,30 @@ function jigAddress(addressString) {
         });
       });
     });
-    if (parts.length >= 3) {
-      jigs.forEach(address => {
-        if (!address.includes("\n")) {
-          addressParts = address.split(" ");
-          for (var i = 2; i < addressParts.length; i++) {
-            splitAddress = "";
-            for (var j = 0; j < i; j++) {
-              splitAddress += addressParts[j] + " ";
+  }
+  if (parts.length >= 3) {
+    jigs.forEach(address => {
+      if (!address.includes("\n")) {
+        addressParts = address.split(" ");
+        for (var i = 2; i < addressParts.length; i++) {
+          if (addressParts.length == 3) {
+            if (addressParts[2].length < 2) {
+              continue;
             }
-            splitAddress =
-              splitAddress.substring(0, splitAddress.length - 1) + "\n";
-            for (var j = i; j < addressParts.length; j++) {
-              splitAddress += addressParts[j] + " ";
-            }
-            jigs.add(splitAddress.substring(0, splitAddress.length - 1));
           }
+          splitAddress = "";
+          for (var j = 0; j < i; j++) {
+            splitAddress += addressParts[j] + " ";
+          }
+          splitAddress =
+            splitAddress.substring(0, splitAddress.length - 1) + "\n";
+          for (var j = i; j < addressParts.length; j++) {
+            splitAddress += addressParts[j] + " ";
+          }
+          jigs.add(splitAddress.substring(0, splitAddress.length - 1));
         }
-      });
-    }
+      }
+    });
   }
   return jigs;
 }

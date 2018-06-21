@@ -86,7 +86,6 @@
         $(function () {
             $("#address-form").on("submit", function (e) {
                 e.preventDefault();
-                content = "";
                 addressJigs = $("#address-jigs");
                 addresses = jigAddress($("#address-input").val().split(",")[0]);
                 unitAddresses = addUnitsToAddresses(addresses);
