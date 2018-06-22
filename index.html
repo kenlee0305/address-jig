@@ -84,10 +84,18 @@
     <script src="/jig.js"></script>
     <script>
         $(function () {
-            $("#address-form").on("submit", function (e) {
+            addressForm = $("#address-form");
+            addressInput = $("#address-input");
+            address2Input = $("#address2-input");
+            addressJigs = $("#address-jigs");
+            addressForm.on("submit", function (e) {
                 e.preventDefault();
-                addressJigs = $("#address-jigs");
-                addresses = jigAddress($("#address-input").val().split(",")[0]);
+                addressString = addressInput.val().split(",")[0];
+                address2String = address2Input.val();
+                if (!address2String.isEmpty()) {
+                    addressString = addressString + "\n" + address2String;
+                }
+                addresses = jigAddress(addressString);
                 unitAddresses = addUnitsToAddresses(addresses);
                 html = createListFromAddresses(addresses);
                 html += createListFromAddresses(unitAddresses);
@@ -99,35 +107,50 @@
                 container: document.querySelector('#address-input')
             });
             function createListFromAddresses(addresses) {
-                html = "<div class=\"col-md-3\"><ul class=\"list-group\">";
-                addresses.forEach(address => {
-                    addressParts = address.split("\n");
-                    html += "<li style=\"white-space: nowrap;\" class=\"list-group-item\">";
-                    addressParts.forEach(addressPart => {
-                        html += addressPart + "<br/>";
+                html = "";
+                if (addresses.size > 0) {
+                    html = "<div class=\"col-md-3\"><ul class=\"list-group\">";
+                    addresses.forEach(address => {
+                        addressParts = address.split("\n");
+                        html += "<li style=\"white-space: nowrap;\" class=\"list-group-item\">";
+                        addressParts.forEach(addressPart => {
+                            html += addressPart + "<br/>";
+                        });
+                        html += "</li>";
                     });
-                    html += "</li>";
-                });
-                html += "</ul></div>";
+                    html += "</ul></div>";
+                }
                 return html;
             }
+            addressInput.on('keydown', function (e) {
+                var key = e.which || e.keyCode;
+                if (key == 9) {
+                    address2Input.focus();
+                } else if (key == 13) {
+                    addressForm.submit();
+                }
+            });
         });
-
     </script>
 </head>
 
 <body style="font-family: 'Quicksand', sans-serif;">
     <div class="container">
-        <div class="col-md-6 col-md-offset-3" style="padding-top: 10%">
+        <div class="col-md-8 col-md-offset-2">
             <div class="panel">
                 <div class="panel-body">
                     <div class="text-center">
                         <img class="img-circle" src="insta.jpg" alt="Supreme Simplified Logo" width="120" height="120" />
                     </div>
                     <h2 class="text-center">Address Jig Tool</h2>
-                    <form method="post" id="address-form" class="validate-form">
+                    <form id="address-form" class="validate-form">
                         <div class="formGroup validate-input" data-validate="Valid address is required.">
-                            <input class="formControl loginInput" id="address-input" type="search" placeholder="What is the Address" name="address" required="required"
+                            <input class="formControl loginInput" id="address-input" type="search" placeholder="Address" name="address" required="required"
+                                autofocus="autofocus" />
+                            <span class="lineFocus" data-placeholder="&#xf2c2;"></span>
+                        </div>
+                        <div class="formGroup validate-input">
+                            <input class="formControl loginInput" value="" id="address2-input" type="search" placeholder="apt, unit, etc" name="address2"
                             />
                             <span class="lineFocus" data-placeholder="&#xf2c2;"></span>
                         </div>
@@ -135,7 +158,6 @@
                             <button type="submit" class="btn btn-danger btn-block">Jig Me</button>
                         </div>
                     </form>
-                    <h3 class="text-center" style="padding-top: 15px;">Addresses</h3>
                 </div>
             </div>
         </div>

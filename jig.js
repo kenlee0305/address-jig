@@ -1,4 +1,4 @@
-translations = [
+TRANSLATIONS = [
   ["street", "st.", "st"],
   ["drive", "dr.", "dr"],
   ["lane", "ln.", "ln"],
@@ -12,16 +12,21 @@ translations = [
   ["mountain", "mtn.", "mtn"]
 ];
 
-units = ["Unit A", "Unit B", "Unit C"];
+UNITS = ["Unit A", "Unit B", "Unit C"];
 
-prefixes = ["ABC", "EFG", "ABD", "XYZ", "DEF", "GHI"];
+PREFIXES = ["ABC", "XYZ", "AAA", "BBB", "CCC", "DDD"];
+
+ADDRESS_REGEX_SPLIT = /[\n ]/;
 
 function jigAddress(addressString) {
   jigs = new Set([addressString]);
-  parts = addressString.split(" ");
+  lines = addressString.split("\n");
+  parts = lines[0].split(" ");
+  console.log("Address Lines: " + lines);
+  console.log("Address parts: " + parts);
   for (var index = 0; index < parts.length; index++) {
     part = parts[index];
-    translations.forEach(entry => {
+    TRANSLATIONS.forEach(entry => {
       possibleJigs = [];
       entry.forEach(val => {
         if (part.toLowerCase() === val) {
@@ -35,11 +40,15 @@ function jigAddress(addressString) {
       possibleJigs.forEach(jig => {
         jigs.forEach(address => {
           fullJig = "";
-          valueParts = address.split(" ");
+          valueLines = address.split("\n");
+          valueParts = valueLines[0].split(" ");
           for (var i = 0; i < valueParts.length; i++) {
             fullJig += (i !== index ? valueParts[i] : jig) + " ";
           }
           fullJig = fullJig.substring(0, fullJig.length - 1);
+          for (var i = 1; i < valueLines.length; i++) {
+            fullJig += "\n" + valueLines[i];
+          }
           jigs.add(fullJig);
         });
       });
@@ -47,11 +56,11 @@ function jigAddress(addressString) {
   }
   if (parts.length >= 3) {
     jigs.forEach(address => {
-      if (!address.includes("\n")) {
+      if (lines.length == 1 && !address.includes("\n")) {
         addressParts = address.split(" ");
         for (var i = 2; i < addressParts.length; i++) {
           if (addressParts.length == 3) {
-            if (addressParts[2].length < 2) {
+            if (addressParts[2].length < 3) {
               continue;
             }
           }
@@ -76,7 +85,7 @@ function addUnitsToAddresses(addresses) {
   unitAddresses = new Set();
   addresses.forEach(address => {
     if (!address.includes("\n")) {
-      units.forEach(unit => {
+      UNITS.forEach(unit => {
         unitAddresses.add(address + "\n" + unit);
       });
     }
@@ -88,7 +97,7 @@ function addPrefixesToAddresses(addresses) {
   newAddresses = new Set();
   addresses.forEach(address => {
     addressParts = address.split("\n");
-    prefixes.forEach(prefix => {
+    PREFIXES.forEach(prefix => {
       newAddress = prefix + " " + addressParts[0];
       for (var i = 1; i < addressParts.length; i++) {
         newAddress += "\n" + addressParts[i];
@@ -98,3 +107,7 @@ function addPrefixesToAddresses(addresses) {
   });
   return newAddresses;
 }
+
+String.prototype.isEmpty = function() {
+  return this.length === 0 || !this.trim();
+};
