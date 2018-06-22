@@ -16,8 +16,6 @@ UNITS = ["Unit A", "Unit B", "Unit C"];
 
 PREFIXES = ["ABC", "XYZ", "AAA", "BBB", "CCC", "DDD"];
 
-ADDRESS_REGEX_SPLIT = /[\n ]/;
-
 function jigAddress(addressString) {
   jigs = new Set([addressString]);
   lines = addressString.split("\n");
