@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <title>Supreme Simplified | Address Jig Tool</title>
+    <title>Supreme Simplified</title>
     <!-- Main CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet" />
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
     <!-- Page Specific CSS -->
     <style type="text/css">
         .loginInput {
@@ -81,7 +81,7 @@
     <!-- Script Files -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/places.js@1.7.3"></script>
-    <script src="/jig.js"></script>
+    <script src="/js/jig.js"></script>
     <script>
         $(function () {
             addressForm = $("#address-form");
@@ -130,8 +130,9 @@
                     addressForm.submit();
                 }
             });
-            addressInput.val("2212 Lake Shore Boulevard West, Toronto, Ontario, Canada");
-            addressForm.submit();
+            String.prototype.isEmpty = function () {
+                return this.length === 0 || !this.trim();
+            };
         });
     </script>
 </head>
@@ -142,17 +143,17 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="text-center">
-                        <img class="img-circle" src="insta.jpg" alt="Supreme Simplified Logo" width="120" height="120" />
+                        <img class="img-circle" src="/img/insta.jpg" alt="Supreme Simplified Logo" width="120" height="120" />
                     </div>
                     <h2 class="text-center">Address Jig Tool</h2>
                     <form id="address-form" class="validate-form">
                         <div class="formGroup validate-input" data-validate="Valid address is required.">
-                            <input class="formControl loginInput" id="address-input" type="search" placeholder="Address" name="address" required="required"
+                            <input class="formControl loginInput" id="address-input" type="search" placeholder="address" name="address" required="required"
                                 autofocus="autofocus" />
                             <span class="lineFocus" data-placeholder="&#xf2c2;"></span>
                         </div>
                         <div class="formGroup validate-input">
-                            <input class="formControl loginInput" value="" id="address2-input" type="search" placeholder="apt, unit, etc" name="address2"
+                            <input class="formControl loginInput" value="" id="address2-input" type="text" placeholder="apt, unit, etc" name="address2"
                             />
                             <span class="lineFocus" data-placeholder="&#xf2c2;"></span>
                         </div>
